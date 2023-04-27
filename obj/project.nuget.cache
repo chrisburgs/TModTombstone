@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "cN8BMyD3NyTEGeHpCzIumcR/RsE0J5HDN+3UyD1l/o0PUK/Z2tles7TWeCg+CxeTtQhcbsF7CDiyUnVfuZCSyg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\chris\\Documents\\git\\TModTombstone\\TombstoneDeathMod2\\TombstoneDeathMod2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\chris\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}
