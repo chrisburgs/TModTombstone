@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace TombstoneDeathMod2
+namespace ChrisTrashstone
 {
     class TombstoneGlobalProjectile : GlobalProjectile
     {

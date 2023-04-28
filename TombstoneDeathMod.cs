@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 
 
-namespace TombstoneDeathMod2
+namespace ChrisTrashstone
 {
     public class TombstoneDeathMod: Terraria.ModLoader.Mod
     {

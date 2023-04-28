@@ -15,7 +15,7 @@ using System;
 using System.IO;
 using System.Net;
 
-namespace TombstoneDeathMod2
+namespace ChrisTrashstone
 {
 	public class DeathLocator : UIState
 	{
@@ -121,7 +121,7 @@ namespace TombstoneDeathMod2
         }
 		public static void playerLocationPanel(int x, int y) {
 			searchBarPanel.RemoveAllChildren();
-			UITextPanel<string> textPanel = new UITextPanel<string>("X: " + x + " Y: " + y, 1f, false);
+			UITextPanel<string> textPanel = new UITextPanel<string>("X: " + x + " Y: " + (y + 2), 1f, false);
 			textPanel.Height.Set(0, 1f);
 			textPanel.Top.Set(0, 0);
 			searchBarPanel.Append(textPanel);

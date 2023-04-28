@@ -1,12 +1,11 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -16,22 +15,9 @@ namespace ChrisTrashstone
 {
     public class TombstonePlayer : ModPlayer
     {
-        public TombstonePlayer() { } 
-
         public Dictionary<Point, PlayerDeathInventory> playerDeathInventoryMap;
         int loadedValue;
 
-		public override void ProcessTriggers(TriggersSet triggersSet)
-		{
-			if (TombstoneDeathMod.DeathLocatorHotKey.JustPressed)
-			{
-                int elementNumber = 0;
-				DeathLocator.visible = !DeathLocator.visible;
-			}
-		}   
-
-
-        
         public override void Initialize()
         {
             playerDeathInventoryMap = new Dictionary<Point, PlayerDeathInventory>();
@@ -89,13 +75,11 @@ namespace ChrisTrashstone
                 // Create dirt below
                 if (WorldGen.TileEmpty(x, y + 1))
                 {
-                    Tile tile = Main.tile[x, y + 1];
-                    tile.HasTile = true;
+                    Main.tile[x, y + 1].HasTile = true;
                 }
                 if (WorldGen.TileEmpty(x + 1, y + 1))
                 {
-                    Tile tile = Main.tile[x + 1, y + 1];
-                    tile.HasTile = true;
+                    Main.tile[x + 1, y + 1].HasTile = true;
                 }
 
                 return true;
@@ -106,15 +90,10 @@ namespace ChrisTrashstone
 
         //public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         //{
-
-        //}
-       // {
-        //    return true;
+            
         //}
 
-
-        //public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
-        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
             Point playerPosition = Player.position.ToTileCoordinates();
             int x = playerPosition.X;
@@ -172,7 +151,7 @@ namespace ChrisTrashstone
                 // Revert to normal death
                 Main.NewText("Unable to place tombstone1. Reverting to normal death.", 255, 100, 100);
                 base.Kill(damage, hitDirection, pvp, damageSource);
-                return true;
+                return;
             }
 
             if (!WorldGen.PlaceTile(x, y, TileID.Tombstones, false, true, 1, 7))
@@ -180,7 +159,7 @@ namespace ChrisTrashstone
                 // Revert to normal death
                 Main.NewText("Unable to place tombstone2. Reverting to normal death.", 255, 100, 100);
                 base.Kill(damage, hitDirection, pvp, damageSource);
-                return true;
+                return;
             }
 
             int sign = Sign.ReadSign(x, y, true);
@@ -219,7 +198,7 @@ namespace ChrisTrashstone
                 {
                     Main.NewText("Previous more valuable death at same position, not overwriting. Reverting to normal death.", 255, 100, 100);
                     base.Kill(damage, hitDirection, pvp, damageSource);
-                    return true;
+                    return;
                 }
 
                 Main.NewText("Previous less valuable death at same position, overwriting.", 255, 100, 100);
@@ -279,11 +258,10 @@ namespace ChrisTrashstone
 
             Main.NewText("Inventory saved in tombstone at " + pointToText(tombStonePosition));
 
-            return true;
-            //base.Kill(damage, hitDirection, pvp, damageSource);
+            base.Kill(damage, hitDirection, pvp, damageSource);
         }
 
-        public override void SaveData(TagCompound tag)/* tModPorter Suggestion: Edit tag parameter instead of returning new TagCompound */
+        public override TagCompound SaveData()
         {
             int maxValue = 0;
             Point position = new Point();
@@ -303,7 +281,7 @@ namespace ChrisTrashstone
 
             if (mostValuableDeath == null)
             {
-                return;
+                return null;
             }
 
             Mod.Logger.Info("Saving inventory in tombstone at " + position.X + ", " + position.Y + ", valued at " + maxValue);
@@ -320,7 +298,7 @@ namespace ChrisTrashstone
             nullEmptyItems(deathMiscEquips);
             nullEmptyItems(deathMiscDyes);
 
-            //TagCompound tag = new TagCompound();
+            TagCompound tag = new TagCompound();
             tag.Add("x", position.X);
             tag.Add("y", position.Y);
             tag.Add("value", maxValue);
@@ -329,6 +307,8 @@ namespace ChrisTrashstone
             tag.Add("deathDye", deathDye);
             tag.Add("deathMiscEquips", deathMiscEquips);
             tag.Add("deathMiscDyes", deathMiscDyes);
+
+            return tag;
         }
 
         private void nullEmptyItems(List<Item> items)
